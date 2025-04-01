@@ -1,0 +1,33 @@
+For this question I decided to do my testing with n = 50,000,000. This very large
+string length allows for great consistency and thus comparabilty of the results.
+I did my testing with 0-4 speculative threads as specified, and also tested with
+some higher values of t for fun. The results from my testing are displayed below.
+Each test score is the mean average of 10 runs, with one warmup run discarded just
+before testing for consistency of cache times.
+
+
+  t | time (ms)
+----------------
+  0 |   556.091
+  1 |  1112.239
+  2 |   747.323
+  3 |   578.131
+  4 |   465.763
+  5 |   406.037
+ 10 |   339.657
+ 50 |   288.951
+
+
+For low values of t we observe significantly worse performance than the sequential
+version (t=0). When you stop and think avout it for a second this makes complete
+sense. Take t=1 for example. The first half of the string is solved sequentially,
+and the second half can be done at the same time, however the second half now must
+be evaluated three times because there are three possible starting states. This
+repetition outweighs the benefits and we see roughly 2x slower execution time.
+
+As we increase the number of threads the benefits start to gain more weight, and we
+very quickly outperform the sequential version as soon as the number of threads is
+larger than the number of initial states we have to account for (3 in this case).
+As we increase the number of threads we get diminishing returns, but we cam still
+almost half the execution time for this particular case with 50 speculative threads
+working in parallel.

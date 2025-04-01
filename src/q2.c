@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
 
 // Function to randomly generate a string of ascii base-10 digits
 char *generateString(int length) {
+
     char *string = malloc(sizeof(char)*(length+1));
     for(int i=0; i<length; i++) {
         string[i] = (rand() % 10) + 48;
@@ -88,6 +89,7 @@ char *generateString(int length) {
 
 // Apply DSA encoding to each character sequentially
 enum state dsa(enum state state, char *s) {
+    
     char *c = s;
     while(*c != '\0') {
         state = getNextState(state, *c);
@@ -98,6 +100,7 @@ enum state dsa(enum state state, char *s) {
 
 // Encoding of all DSA edges for each state and character pair
 enum state getNextState(enum state prevState, char c) {
+
     switch(prevState) {
         case A:
             switch(c) {
@@ -142,15 +145,14 @@ enum state getNextState(enum state prevState, char c) {
 }
 
 // Calculate the difference in time between two timepsec structs
-void getTimeDiff(struct timespec before, struct timespec after, struct timespec *diff)
-{
+void getTimeDiff(struct timespec before, struct timespec after, struct timespec *diff) {
+
     diff->tv_nsec = after.tv_nsec - before.tv_nsec;
     diff->tv_sec  = after.tv_sec - before.tv_sec;
-    if (diff->tv_sec > 0 && diff->tv_nsec < 0) {
+    if(diff->tv_sec > 0 && diff->tv_nsec < 0) {
         diff->tv_nsec += NS_PER_SECOND;
         diff->tv_sec--;
-    }
-    else if (diff->tv_sec < 0 && diff->tv_nsec > 0) {
+    } else if (diff->tv_sec < 0 && diff->tv_nsec > 0) {
         diff->tv_nsec -= NS_PER_SECOND;
         diff->tv_sec++;
     }
