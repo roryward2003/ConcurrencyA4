@@ -1,0 +1,47 @@
+For this question I decided to use 4 threads for my concurrent version, as my
+machine has a 4 core CPU. To test my code sequentially I simply set omp to use
+1 thread instead of 4. The results I obtained are displayed below, and a brief
+description of these results can be found beneath the results.
+
+
+// COMPILED USING 4 THREADS
+PS C:\...\src>gcc -o q1 -fopenmp q1.c
+
+PS C:\...\src>./q1 10000 0.05 42
+    Matrix init: 284 ms
+    CSR conversion: 327 ms
+
+PS C:\...\src>./q1 10000 0.2 42
+    Matrix init: 260 ms
+    CSR conversion: 495 ms
+
+PS C:\...\src>./q1 10000 0.5 42
+    Matrix init: 262 ms
+    CSR conversion: 719 ms
+
+
+// COMPILED USING 1 THREAD
+PS C:\...\src>gcc -o q1 -fopenmp q1.c
+
+PS C:\...\src>./q1 10000 0.05 42     
+    Matrix init: 879 ms
+    CSR conversion: 864 ms
+
+PS C:\...\src>./q1 10000 0.2 42      
+    Matrix init: 873 ms
+    CSR conversion: 1282 ms
+
+PS C:\...\src>./q1 10000 0.5 42      
+    Matrix init: 874 ms
+    CSR conversion: 2020 ms
+
+
+Clearly the concurrent implementation is far more efficient than its sequential
+counterpart in both initialisation of the matrix and the CSR conversion. For the
+matrix initialisation all four threads are set to work, and we see a roughly 3.2x
+increase in execution speed. For CSR conversion, only three threads can work in
+parallel and we see a roughly 2.7x increase in execution speed.
+
+In short, both of these actions are highly parallelisable, and my concurrent
+implementation takes advantage of that to massively reduce execution speed whilst
+returning the same output.
